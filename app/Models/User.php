@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\URL;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -48,10 +49,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['is_active_label'];
+    protected $appends = [
+        'is_active_label',
+        'avatar_url'
+    ];
 
     public function getIsActiveLabelAttribute()
     {
         return $this->is_active == 1 ? 'Active' : 'Inactive';
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? URL::to('storage/' . $this->avatar) : null;
     }
 }

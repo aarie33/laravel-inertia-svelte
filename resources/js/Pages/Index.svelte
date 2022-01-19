@@ -78,52 +78,21 @@
           <Search on:input={(e) => query.search = e.detail } />
         </div>
         <button
-          class="
-            bg-white
-            text-sm text-gray-500
-            hover:bg-blue-50
-            hover:text-blue-600
-            focus:text-blue-600
-            rounded
-            mx-1
-            px-5
-            h-9
-          "
+          class="bg-white text-sm text-gray-500 hover:bg-blue-50 hover:text-blue-600 focus:text-blue-600
+            rounded mx-1 px-5 h-9 border border-gray-200"
           type="button"
           on:click={clear}
         >
           Reset
         </button>
         <button
-          class="
-            bg-blue-500
-            hover:bg-blue-600
-            inline-block
-            flex
-            items-center
-            h-9
-            px-2
-            rounded
-            float-right
-            text-white
-            cursor-pointer
-          "
+          class="bg-blue-500 hover:bg-blue-600 inline-block flex items-center
+            h-9 px-2 rounded float-right text-white cursor-pointer"
           type="button"
           use:inertia="{{ href: '/users/create', undefined, preserveState: true }}"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
           Tambah
         </button>
@@ -190,44 +159,31 @@
             lg:mb-0
           "
         >
-          <td class="px-3">
+          <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             { rowNumber(index) }
           </td>
-          <td class="px-3">
+          <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             <div>{ item.name }</div>
               <i class="text-gray-500 text-xs">{ item.email }</i>
           </td>
-          <td class="px-3">
+          <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             { item.phone }
           </td>
-          <td class="px-3">
+          <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             { item.address || "-" }
           </td>
-          <td class="px-3">
+          <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             <div
                 class="rounded-md text-white text-sm px-2 mb-2"
-                class:bg-blue-400={ item.is_active == 'Active' }
-                class:bg-gray-500={ item.is_active != 'Active' }
+                class:bg-blue-500={ item.is_active == 1 }
+                class:bg-gray-500={ item.is_active != 1 }
                 >{ item.is_active_label }</div
               >
           </td>
           <td
-            class="
-              w-full
-              lg:w-auto
-              pl-3
-              pb-1
-              pr-3
-              pt-2
-              lg:p-3
-              text-gray-800 text-center
-              block
-              lg:table-cell
-              relative
-              lg:static
-            "
-          >
-            <div class="flex mb-1">
+            class="w-full lg:w-auto pl-3 pb-1 pr-3 pt-2 lg:p-3 text-center
+              block lg:table-cell relative lg:static">
+            <div class="flex justify-end mb-1">
               <div
                 class="
                   inline-flex
@@ -238,7 +194,9 @@
                   h-8
                   w-8
                   rounded-md
+                  cursor-pointer
                 "
+                use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -267,6 +225,7 @@
                   mx-1
                   cursor-pointer
                 "
+                use:inertia="{{ href: `/users/${item.id}/edit`, undefined, preserveState: true }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

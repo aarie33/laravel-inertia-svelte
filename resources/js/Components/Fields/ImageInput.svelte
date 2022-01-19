@@ -1,20 +1,27 @@
 <script>
-	let  avatar, fileinput;
-	
-	const onFileSelected =(e)=>{
+import { createEventDispatcher } from 'svelte';
+const dispatch = createEventDispatcher();
+
+export let value;
+
+let preview = value;
+let fileinput;
+
+const onFileSelected = (e) => {
+  dispatch("input", e.target.files[0]);
   let image = e.target.files[0];
-            let reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = e => {
-                 avatar = e.target.result
-            };
+  let reader = new FileReader();
+  reader.readAsDataURL(image);
+  reader.onload = e => {
+    preview = e.target.result
+  };
 }
-	
+
 </script>
 Upload Image
 <div class="w-full flex flex-col border border-gray-200 p-2 rounded">
-  {#if avatar}
-    <img class="cursor-pointer" on:click={()=>{fileinput.click();}} src="{avatar}" alt="d" />
+  {#if preview}
+    <img class="cursor-pointer" on:click={()=>{fileinput.click();}} src="{preview}" alt="d" />
   {:else}
     <div class="cursor-pointer" on:click={()=>{fileinput.click();}}>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-blue-500" viewBox="0 0 20 20" fill="currentColor">

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -42,9 +44,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $request->merge(['password' => bcrypt('password')]);
+        $user = new User();
+        $user->fill($request->all());
+        $user->avatar = $request->avatar->store('avatar', 'public');
+        $user->save();
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -53,9 +61,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return Inertia::render('Detail',[
+            'title' => 'Detail User',
+            'resource' => $user
+        ]);
     }
 
     /**
@@ -64,9 +75,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return Inertia::render('Edit',[
+            'title' => 'Edit User',
+            'resource' => $user
+        ]);
     }
 
     /**
@@ -76,9 +90,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->fill($request->all());
+        $user->avatar = $request->hasFile('avatar') ? 
+            $request->avatar->store('avatar', 'public') : $user->avatar;
+        $user->save();
+
+        return redirect()->route('users.index');
     }
 
     /**

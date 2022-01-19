@@ -17,7 +17,7 @@
   <input
     ref="input"
     bind:value={ value }
-    class="block form-input relative w-full focus:shadow-outline h-9 px-2 rounded text-base"
+    class="block form-input relative w-full focus:shadow-outline h-9 px-2 rounded text-base border border-gray-200"
     autocomplete="off"
     type="text"
     name="search"

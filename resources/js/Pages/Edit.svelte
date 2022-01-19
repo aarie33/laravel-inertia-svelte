@@ -1,22 +1,27 @@
 <script>
   import { Link, useForm } from '@inertiajs/inertia-svelte'
+  import { Inertia } from '@inertiajs/inertia'
 
   import ImageInput from '../Components/Fields/ImageInput.svelte';
 
   export let title;
   export let errors;
+  export let resource;
 
   let form = useForm({
-    name: null,
-    email: null,
-    phone: null,
-    address: null,
-    gender: null,
-    avatar: null
+    name: resource.name,
+    email: resource.email,
+    phone: resource.phone,
+    address: resource.address,
+    gender: resource.gender,
+    avatar: resource.avatar
   });
 
   function submit() {
-    $form.post('/users')
+    Inertia.post(`/users/${resource.id}`, {
+      _method: 'put',
+      ...$form
+    });
   }
 </script>
 
@@ -67,7 +72,7 @@
         </select>
         {#if errors.gender}<div class="text-xs text-red-500">{errors.gender}</div>{/if}
         <div class="mt-2"></div>
-        <ImageInput on:input={ (e) => $form.avatar = e.detail } />
+        <ImageInput on:input={ (e) => $form.avatar = e.detail } value={resource.avatar_url} />
         {#if errors.avatar}<div class="text-xs text-red-500">{errors.avatar}</div>{/if}
       </div>
     </div>
