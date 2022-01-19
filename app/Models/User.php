@@ -25,6 +25,7 @@ class User extends Authenticatable
         'gender',
         'avatar',
         'address',
+        'is_active',
         'password',
     ];
 
@@ -46,4 +47,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = ['is_active_label'];
+
+    public function getIsActiveLabelAttribute()
+    {
+        return $this->is_active == 1 ? 'Active' : 'Inactive';
+    }
 }

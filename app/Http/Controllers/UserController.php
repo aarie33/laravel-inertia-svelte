@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,10 +13,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $resources = User::orderBy($request->get('sort', 'name'), $request->get('order', 'asc'))
+            ->paginate($request->per_page ?? 10);
+
         return Inertia::render('Index', [
             'title' => 'Users',
+            'resources' => $resources
         ]);
     }
 

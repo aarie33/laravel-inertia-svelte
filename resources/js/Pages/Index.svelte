@@ -7,7 +7,9 @@
   import Search from "../Components/Table/Search.svelte";
   import Pagination from "../Components/Table/Pagination.svelte";
 
+  // props
   export let title;
+  export let resources;
 
   let query = {
     search: null,
@@ -62,66 +64,6 @@
 
   function get(object, key) {
     return object[key] ?? null;
-  }
-
-  // TODO : replace with datatable response data
-  let resources = {
-    data: [
-      {
-        id: 1,
-        name: 'Abi',
-        email: 'abi@gmail.com',
-        phone: '123',
-        address: 'Jombang',
-        is_active: 'Active'
-      }, {
-        id: 2,
-        name: 'Adi',
-        email: 'adi@gmail.com',
-        phone: '1234',
-        address: 'Kencong',
-        is_active: 'Active'
-      }, {
-        id: 4,
-        name: 'Ali',
-        email: 'ali@gmail.com',
-        phone: '143',
-        address: 'Jombang Jember',
-        is_active: 'Active'
-      }, {
-        id: 5,
-        name: 'Ari',
-        email: 'ari@gmail.com',
-        phone: '12323',
-        address: 'Jombang Jember',
-        is_active: 'Active'
-      }
-    ],
-    links: [
-      {
-        label: 'Previous'
-      },{
-        label: '1'
-      },{
-        label: 'Next'
-      }
-    ],
-    filters: [
-      {
-        componentName: "dropdown-filter",
-        label: "status",
-        name: "status",
-        options:[
-          { 
-            value: 'Status',
-            name: 'Status'
-          }
-        ],
-        paramName: "filter-status",
-        type: "dropdown",
-        value: null
-      }
-    ]
   }
 </script>
 
@@ -266,7 +208,7 @@
                 class="rounded-md text-white text-sm px-2 mb-2"
                 class:bg-blue-400={ item.is_active == 'Active' }
                 class:bg-gray-500={ item.is_active != 'Active' }
-                >{ item.is_active }</div
+                >{ item.is_active_label }</div
               >
           </td>
           <td

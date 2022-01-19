@@ -18,7 +18,9 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require("tailwindcss"),
     ])
-    .svelte()
+    .svelte({
+        dev: true
+    })
     .webpackConfig({
         output: {
             chunkFilename: 'js/[name].js?id=[chunkhash]',
@@ -28,5 +30,5 @@ mix.js('resources/js/app.js', 'public/js')
                 ziggy: path.resolve('vendor/tightenco/ziggy/dist'),
                 '@': path.resolve('resources/js'),
             },
-        },
+        }
     })
