@@ -10,38 +10,32 @@
   // props
   export let title;
   export let resources;
+  export let params;
 
-  let query = {
-    search: null,
-    page: 1,
-    per_page: 10,
-    sort: 'name',
-    order: 'asc',
+  $: query = {
+    search: params.search || null,
+    page: resources.current_page,
+    per_page: resources.per_page,
+    sort: params.sort || 'name',
+    order: params.order || 'asc',
   }
 
   let filters = []
 
-  function sort(e) {
-    query.sort = e.detail.key
-    query.order = e.detail.order
-  }
-
   function rowNumber(index) {
     const newIndex = Number(index);
     return (
-      query.page * query.per_page - query.per_page + 1 + newIndex
+      Number(query.page) * Number(query.per_page) - Number(query.per_page) + 1 + newIndex
     );
   }
 
   function handleQueryChange() {
-    // TODO : visit link page
-    // this.$inertia.replace(window.location.pathname, {
-    //   data: query,
-    //   preserveScroll: true,
-    //   preserveState: true,
-    // });
-
-    console.log('query changed')
+    Inertia.visit(window.location.pathname, {
+      data: query,
+      replace: true,
+      preserveScroll: true,
+      preserveState: true,
+    });
   }
 
   function changePerPage(e) {
@@ -49,7 +43,22 @@
     handleQueryChange();
   }
 
-  $: handleQueryChange(query)
+  function changePage(e) {
+    query.page = e.detail;
+    handleQueryChange();
+  }
+  
+  function onSearch(e) {
+    query.search = e.detail
+    handleQueryChange();
+  }
+
+  function sort(e) {
+    query.sort = e.detail.key
+    query.order = e.detail.order
+
+    handleQueryChange();
+  }
 
   function clear() {
     for (let i in filters) {
@@ -75,7 +84,7 @@
         <FilterPanel on:input={(e) => query = e.detail } filters={ filters } />
           
         <div class="flex-grow ml-1">
-          <Search on:input={(e) => query.search = e.detail } />
+          <Search search={query.search} on:input={ onSearch } />
         </div>
         <button
           class="bg-white text-sm text-gray-500 hover:bg-blue-50 hover:text-blue-600 focus:text-blue-600
@@ -144,21 +153,12 @@
         </tr>
       </thead>
       <tbody>
-        {#each resources.data as item, index }
+        {#each resources.data as item, index  (item.id)}
         <tr
           class="
-            bg-white
-            lg:hover:bg-gray-100
-            flex
-            lg:table-row
-            flex-row
-            lg:flex-row
-            flex-wrap
-            lg:flex-no-wrap
-            mb-10
-            lg:mb-0
-          "
-        >
+            bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap 
+            mb-10 lg:mb-0 border-b border-gray-200"
+          >
           <td class="px-3 cursor-pointer" use:inertia="{{ href: `/users/${item.id}`, undefined, preserveState: true }}">
             { rowNumber(index) }
           </td>
@@ -273,7 +273,7 @@
         {#if resources.data.length == 0 }
         <tr>
           <td colspan="6" class="text-center py-3">
-            <span class="text-muted">Tidak ada data</span>
+            <span class="text-gray-500 text-sm italic">Tidak ada data</span>
           </td>
         </tr>
         {/if}
@@ -282,9 +282,11 @@
   
     <Pagination
       links={ resources.links }
+      total={ resources.total }
       perPagePptions={ [10, 20, 50, 100] }
       query={ query }
       on:changePerPage={ changePerPage }
+      on:changePage={ changePage }
     />
   </div>
 </main>

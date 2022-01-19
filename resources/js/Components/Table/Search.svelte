@@ -4,7 +4,8 @@
 
   const dispatch = createEventDispatcher();
 
-  export let value = ''
+  export let search;
+  let value = search;
   
   const handleInput = debounce(e => {
     value = e.target.value;

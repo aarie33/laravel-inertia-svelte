@@ -1,4 +1,5 @@
 <script>
+  import { Inertia } from '@inertiajs/inertia'
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -15,16 +16,8 @@
     dispatch("changePerPage", perPageOption); 
   }
 
-  function visit(route) {
-    if (route) {
-      // this.$inertia.visit(route, {
-      //   preserveScroll: true,
-      //   preserveState: true,
-      // });
-
-      // TODO
-      console.log('visit page');
-    }
+  function changePage(mPage) {
+    dispatch("changePage", mPage);
   }
 </script>
 
@@ -40,7 +33,7 @@
         {#each perPageOptions as perPageOption, index (index) }
           <span
             class="font-medium cursor-pointer mx-2 block text-center p-1 rounded-md
-              {query.per_page == perPageOption ? `bg-blue-400 text-white` : ``}
+              {query.per_page == perPageOption ? `bg-blue-500 text-white` : ``}
               { index === 0 ? `ml-0` : ``}"
             on:click={changeFilterPerPage(perPageOption)}>
             { perPageOption }
@@ -54,8 +47,8 @@
       <li class="inline-block float-left ml-3 text-base">
         {#if link.label === '&laquo; Previous' || link.label === '&laquo; Sebelumnya' || link.label === 'Previous' }
           <span
-            on:click={ visit(link.url) }
-            class="bg-blue-400 inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer"
+            on:click={ () => changePage(1) }
+            class="bg-blue-500 inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,8 +68,8 @@
         {:else if link.label === 'Next &raquo;' || link.label === 'Berikutnya &raquo;' || link.label === 'Next' }
           <span
             tabindex="0"
-            class="bg-blue-400 inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer"
-            on:click={ visit(link.url) }
+            class="bg-blue-500 inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer"
+            on:click={ () => changePage(index - 1) }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,9 +87,11 @@
           ></span>
         {:else}
           <span
-            class="border border-gray-400 text-gray-500 font-bold hover:border-blue-400 hover:text-blue-400 text-md inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer"
-            on:click={ visit(link.url) }
-            class:bg-blue-150={ link.active }
+            class="border border-gray-200 text-gray-500 font-bold hover:border-blue-500 hover:text-blue-500 
+              text-md inline-block flex items-center justify-center h-8 w-8 rounded-md cursor-pointer bg-white"
+            on:click={ () => changePage(link.label) }
+            class:bg-blue-500={ link.active }
+            class:text-white={ link.active }
             >{ link.label }</span>
           {/if}
       </li>

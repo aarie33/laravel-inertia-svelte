@@ -17,12 +17,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $resources = User::orderBy($request->get('sort', 'name'), $request->get('order', 'asc'))
-            ->paginate($request->per_page ?? 10);
+        $resources = User::where(function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('phone', 'like', '%' . $request->search . '%')
+                ->orWhere('address', 'like', '%' . $request->search . '%');
+        })
+        ->orderBy($request->get('sort', 'name'), $request->get('order', 'asc'))
+        ->paginate($request->per_page ?? 10);
 
         return Inertia::render('Index', [
             'title' => 'Users',
-            'resources' => $resources
+            'resources' => $resources,
+            'params' => $request->all()
         ]);
     }
 
