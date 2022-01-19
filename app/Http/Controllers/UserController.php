@@ -59,7 +59,7 @@ class UserController extends Controller
         $user->avatar = $request->avatar->store('avatar', 'public');
         $user->save();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'User created successfuly');
     }
 
     /**
@@ -104,7 +104,7 @@ class UserController extends Controller
             $request->avatar->store('avatar', 'public') : $user->avatar;
         $user->save();
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'User updated successfuly');
     }
 
     /**
@@ -113,8 +113,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User deleted successfuly');
     }
 }

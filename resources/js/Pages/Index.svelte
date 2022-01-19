@@ -1,11 +1,11 @@
 <script>
   import { Inertia } from '@inertiajs/inertia'
   import { inertia } from '@inertiajs/inertia-svelte'
-  import { routes } from "../Mixins/Route";
   import FilterPanel from "../Components/Table/Filter/FilterPanel.svelte";
   import TableHeaderColumn from "../Components/Table/TableHeaderColumn.svelte";
   import Search from "../Components/Table/Search.svelte";
   import Pagination from "../Components/Table/Pagination.svelte";
+  import Confirm from "../Components/Modal/Confirm.svelte";
 
   // props
   export let title;
@@ -22,6 +22,13 @@
 
   let filters = []
 
+  $: showModal = false
+  $: selectedId = null
+  const handleToggleModal = (id = null) => {
+    showModal = !showModal
+    selectedId = id
+  }
+  
   function rowNumber(index) {
     const newIndex = Number(index);
     return (
@@ -74,8 +81,26 @@
   function get(object, key) {
     return object[key] ?? null;
   }
+
+  function confirmModal() {
+    Inertia.post(`/users/${selectedId}`, {
+      _method: 'delete',
+      preserveScroll: true,
+      preserveState: true
+    });
+    handleToggleModal()
+  }
 </script>
 
+<Confirm 
+  open={showModal} 
+  title="Delete User ?" 
+  desc="Are you sure want to delete this user ?" 
+  type="warning" 
+  action="Delete" 
+  on:close={() => handleToggleModal()}
+  on:confirm={() => confirmModal()} />
+  
 <main class="px-40 py-10">
   <h5 class="text-blue-700 mb-3">{ title }</h5>
   <div class="mb-6">
@@ -250,6 +275,7 @@
                   rounded-md
                   cursor-pointer
                 "
+                on:click={() => handleToggleModal(item.id) }
               >
                 <svg
                   width="24"
