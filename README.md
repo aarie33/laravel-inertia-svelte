@@ -51,6 +51,8 @@ npm run watch/dev/prod
             <img src="public/images/detail.jpeg" width="500" />
             <div>Detail Page</div>
         </td>
+        <td>
+        </td>
     </tr>
 </table>
 
