@@ -59,6 +59,7 @@ npm run watch/dev/prod
 ## How to Init Project
 ## Composer
 ```
+composer create-project laravel/laravel example-app
 composer require inertiajs/inertia-laravel
 composer require tightenco/ziggy
 php artisan inertia:middleware
