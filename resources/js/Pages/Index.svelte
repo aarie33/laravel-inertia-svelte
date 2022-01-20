@@ -1,26 +1,27 @@
 <script>
   import { Inertia } from '@inertiajs/inertia'
   import { inertia } from '@inertiajs/inertia-svelte'
-  import FilterPanel from "../Components/Table/Filter/FilterPanel.svelte";
+  import FilterPanel from "../Components/Table/FilterPanel.svelte";
   import TableHeaderColumn from "../Components/Table/TableHeaderColumn.svelte";
   import Search from "../Components/Table/Search.svelte";
   import Pagination from "../Components/Table/Pagination.svelte";
   import Confirm from "../Components/Modal/Confirm.svelte";
+  import Notification from "../Components/Notification/Notification.svelte";
 
   // props
   export let title;
   export let resources;
+  export let filters;
   export let params;
 
   $: query = {
+    ...params,
     search: params.search || null,
     page: resources.current_page,
     per_page: resources.per_page,
     sort: params.sort || 'name',
     order: params.order || 'asc',
   }
-
-  let filters = []
 
   $: showModal = false
   $: selectedId = null
@@ -68,18 +69,39 @@
   }
 
   function clear() {
-    for (let i in filters) {
-      if (get(query, filters[i].paramName) != null) {
-        query = query.reduce(function(item) {
-          return item.filters[i].paramName != filters[i].paramName;
-        });
-      }
+    query = {
+      search: null,
+      page: query.page,
+      per_page: query.per_page,
+      sort: query.sort,
+      order: query.order,
     }
-    query.search = null;
+    handleQueryChange();
+  }
+
+  function clearFilter() {
+    query = {
+      search: query.search,
+      page: query.page,
+      per_page: query.per_page,
+      sort: query.sort,
+      order: query.order,
+    }
+    handleQueryChange();
   }
 
   function get(object, key) {
     return object[key] ?? null;
+  }
+
+  function setFilter(e) {
+    let filter = e.detail
+    if (filter.value == null || filter.value == '') {
+      delete query[filter.key]
+    } else {
+      query[filter.key] = filter.value
+    }
+    handleQueryChange()
   }
 
   function confirmModal() {
@@ -100,13 +122,18 @@
   action="Delete" 
   on:close={() => handleToggleModal()}
   on:confirm={() => confirmModal()} />
-  
+
+
+<Notification />
 <main class="px-40 py-10">
   <h5 class="text-blue-700 mb-3">{ title }</h5>
   <div class="mb-6">
     <div class="mt-2 pt-0">
       <div class="flex justify-between flex-wrap sm:flex-no-wrap">
-        <FilterPanel on:input={(e) => query = e.detail } filters={ filters } />
+        <FilterPanel 
+        {filters} {query}
+        on:input={setFilter}
+        on:clear={clearFilter} />
           
         <div class="flex-grow ml-1">
           <Search search={query.search} on:input={ onSearch } />

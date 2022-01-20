@@ -92,6 +92,7 @@
             on:click={ () => changePage(link.label) }
             class:bg-blue-500={ link.active }
             class:text-white={ link.active }
+            class:hover:text-white={ link.active }
             >{ link.label }</span>
           {/if}
       </li>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Filters\GenderFilter;
+use App\Models\Filters\StatusFilter;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,18 +19,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $resources = User::where(function ($query) use ($request) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%')
-                ->orWhere('phone', 'like', '%' . $request->search . '%')
-                ->orWhere('address', 'like', '%' . $request->search . '%');
-        })
+        $filters = [
+            new StatusFilter(),
+            new GenderFilter()
+        ];
+
+        $resources = User::filterResource($request, ['name', 'email', 'phone', 'address'], $filters)
         ->orderBy($request->get('sort', 'name'), $request->get('order', 'asc'))
         ->paginate($request->per_page ?? 10);
 
         return Inertia::render('Index', [
             'title' => 'Users',
             'resources' => $resources,
+            'filters' => $filters,
             'params' => $request->all()
         ]);
     }

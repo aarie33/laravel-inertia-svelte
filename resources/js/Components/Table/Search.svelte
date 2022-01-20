@@ -5,7 +5,7 @@
   const dispatch = createEventDispatcher();
 
   export let search;
-  let value = search;
+  $: value = search;
   
   const handleInput = debounce(e => {
     value = e.target.value;
