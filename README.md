@@ -14,7 +14,49 @@ npm run watch/dev/prod
 ```
 
 
-## Init Project
+## Screenshots
+<table>
+    <tr>
+        <td>
+            <img src="public/images/index.jpeg" width="500" />
+            <div>Index Page</div>
+        </td>
+        <td>
+            <img src="public/images/index-filter.jpeg" width="500" />
+            <div>Index Page With Filter</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="public/images/index-delete.jpeg" width="500" />
+            <div>Delete Confirmation</div>
+        </td>
+        <td>
+            <img src="public/images/index-success.jpeg" width="500" />
+            <div>Success Message</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="public/images/create.jpeg" width="500" />
+            <div>Create Page</div>
+        </td>
+        <td>
+            <img src="public/images/edit.jpeg" width="500" />
+            <div>Edit Page</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <img src="public/images/detail.jpeg" width="500" />
+            <div>Detail Page</div>
+        </td>
+    </tr>
+</table>
+
+
+
+## How to Init Project
 ## Composer
 ```
 composer require inertiajs/inertia-laravel
